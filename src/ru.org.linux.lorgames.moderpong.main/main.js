@@ -73,6 +73,7 @@ function moveModerhead() {
     // reference useful varaibles
     var moderheadTop = parseInt($("#moderhead").css("top"));
     var moderheadLeft = parseInt($("#moderhead").css("left"));
+    var moderheadRight = moderheadLeft+parseInt($("#moderhead").css("width"));
     var playgroundHeight = parseInt($("#playground").height());
     var playgroundWidth = parseInt($("#playground").width());
     var moderhead = moderpong.moderhead;
@@ -104,6 +105,7 @@ function moveModerhead() {
         // update the moderhead location variables;
         moderheadTop = parseInt($("#moderhead").css("top"));
         moderheadLeft = parseInt($("#moderhead").css("left"));
+        moderheadRight = moderheadLeft+parseInt($("#moderhead").css("width"));
         moderhead.directionX = -1;
     }
     // check left
@@ -122,6 +124,7 @@ function moveModerhead() {
         // update the moderhead location variables;
         moderheadTop = parseInt($("#moderhead").css("top"));
         moderheadLeft = parseInt($("#moderhead").css("left"));
+        moderheadRight = moderheadLeft+parseInt($("#moderhead").css("width"));
         moderhead.directionX = 1;
     }
 
@@ -143,7 +146,7 @@ function moveModerhead() {
     var paddleBX = parseInt($("#paddleB").css("left"));
     var paddleBYBottom = parseInt($("#paddleB").css("top"))+parseInt($("#paddleB").css("height"));
     var paddleBYTop = parseInt($("#paddleB").css("top"));
-    if (moderheadLeft + moderhead.speed*moderhead.directionX >= paddleBX)
+    if (moderheadRight + moderhead.speed*moderhead.directionX >= paddleBX)
     {
         if (moderheadTop + moderhead.speed*moderhead.directionY <= paddleBYBottom &&
             moderheadTop + moderhead.speed*moderhead.directionY >= paddleBYTop)
