@@ -1,4 +1,7 @@
-var moderpong = {};
+var moderpong = {
+    scoreA : 0,
+    scoreB : 0
+};
 moderpong.pressedKeys = [];
 moderpong.moderhead = {
     speed:5,
@@ -20,6 +23,8 @@ $(function () {
 });
 
 function main() {
+    alert("Earn 10 points. Fight!");
+
     moderpong.timer = setInterval(gameloop, 30);
 
     $(document).keydown(function (e) {
@@ -34,6 +39,14 @@ function main() {
 function gameloop() {
     moveModerhead();
     movePaddles();
+    checkWin();
+}
+
+function checkWin() {
+    if (moderpong.scoreA>9 || moderpong.scoreB>9) {
+        alert("JB WON!");
+        location.reload();
+    }
 }
 
 function movePaddles() {
@@ -56,73 +69,93 @@ function movePaddles() {
 }
 
 function moveModerhead() {
-    // reference useful variables
+    // move the moderhead in every 30 milliseconds
+    // reference useful varaibles
+    var moderheadTop = parseInt($("#moderhead").css("top"));
+    var moderheadLeft = parseInt($("#moderhead").css("left"));
     var playgroundHeight = parseInt($("#playground").height());
     var playgroundWidth = parseInt($("#playground").width());
     var moderhead = moderpong.moderhead;
 
     // check playground boundary
-    // check bottom edge
-    if (moderhead.y + moderhead.speed * moderhead.directionY > playgroundHeight) {
+    // check bottom
+    if (moderheadTop+moderhead.speed*moderhead.directionY > playgroundHeight)
+    {
         moderhead.directionY = -1;
     }
-    // check top edge
-    if (moderhead.y + moderhead.speed * moderhead.directionY < 0) {
+    // check top
+    if (moderheadTop+moderhead.speed*moderhead.directionY < 0)
+    {
         moderhead.directionY = 1;
     }
+    // check right
+    if (moderheadLeft+moderhead.speed*moderhead.directionX > playgroundWidth)
+    {
+        // player B lost.		
+        moderpong.scoreA++;
+        $("#scoreA").html(moderpong.scoreA);
 
-    // check right edge
-    if (moderhead.x + moderhead.speed * moderhead.directionX > playgroundWidth) {
-        // player B lost.    
         // reset the moderhead;
-        moderhead.x = 250;
-        moderhead.y = 100;
         $("#moderhead").css({
-            "left":moderhead.x,
-            "top":moderhead.y
+            "left":"250px",
+            "top" :"100px"
         });
+
+        // update the moderhead location variables;
+        moderheadTop = parseInt($("#moderhead").css("top"));
+        moderheadLeft = parseInt($("#moderhead").css("left"));
         moderhead.directionX = -1;
     }
+    // check left
+    if (moderheadLeft + moderhead.speed*moderhead.directionX < 0)
+    {
+        // player A lost.		
+        moderpong.scoreB++;
+        $("#scoreB").html(moderpong.scoreB);
 
-    // check left edge
-    if (moderhead.x + moderhead.speed * moderhead.directionX < 0) {
-        // player A lost.    
         // reset the moderhead;
-        moderhead.x = 150;
-        moderhead.y = 100;
         $("#moderhead").css({
-            "left":moderhead.x,
-            "top":moderhead.y
+            "left":"150px",
+            "top" :"100px"
         });
+
+        // update the moderhead location variables;
+        moderheadTop = parseInt($("#moderhead").css("top"));
+        moderheadLeft = parseInt($("#moderhead").css("left"));
         moderhead.directionX = 1;
     }
 
-    moderhead.x += moderhead.speed * moderhead.directionX;
-    moderhead.y += moderhead.speed * moderhead.directionY;
-
+    // check moving paddle here, later.
     // check left paddle
-    var paddleAX = parseInt($("#paddleA").css("left")) + parseInt($("#paddleA").css("width"));
-    var paddleAYBottom = parseInt($("#paddleA").css("top")) + parseInt($("#paddleA").css("height"));
+    var paddleAX = parseInt($("#paddleA").css("left"))+parseInt($("#paddleA").css("width"));
+    var paddleAYBottom = parseInt($("#paddleA").css("top"))+parseInt($("#paddleA").css("height"));
     var paddleAYTop = parseInt($("#paddleA").css("top"));
-    if (moderhead.x + moderhead.speed * moderhead.directionX < paddleAX) {
-        if (moderhead.y + moderhead.speed * moderhead.directionY <= paddleAYBottom &&
-            moderhead.y + moderhead.speed * moderhead.directionY >= paddleAYTop) {
+    if (moderheadLeft + moderhead.speed*moderhead.directionX < paddleAX)
+    {
+        if (moderheadTop + moderhead.speed*moderhead.directionY <= paddleAYBottom &&
+            moderheadTop + moderhead.speed*moderhead.directionY >= paddleAYTop)
+        {
             moderhead.directionX = 1;
         }
     }
+
     // check right paddle
     var paddleBX = parseInt($("#paddleB").css("left"));
-    var paddleBYBottom = parseInt($("#paddleB").css("top")) + parseInt($("#paddleB").css("height"));
+    var paddleBYBottom = parseInt($("#paddleB").css("top"))+parseInt($("#paddleB").css("height"));
     var paddleBYTop = parseInt($("#paddleB").css("top"));
-    if (moderhead.x + moderhead.speed * moderhead.directionX >= paddleBX) {
-        if (moderhead.y + moderhead.speed * moderhead.directionY <= paddleBYBottom &&
-            moderhead.y + moderhead.speed * moderhead.directionY >= paddleBYTop) {
+    if (moderheadLeft + moderhead.speed*moderhead.directionX >= paddleBX)
+    {
+        if (moderheadTop + moderhead.speed*moderhead.directionY <= paddleBYBottom &&
+            moderheadTop + moderhead.speed*moderhead.directionY >= paddleBYTop)
+        {
             moderhead.directionX = -1;
         }
     }
 
+
+    // actually move the moderhead with speed and direction
     $("#moderhead").css({
-        "left":moderhead.x,
-        "top":moderhead.y
+        "left" : moderheadLeft + moderhead.speed * moderhead.directionX,
+        "top" : moderheadTop + moderhead.speed * moderhead.directionY
     });
 }
