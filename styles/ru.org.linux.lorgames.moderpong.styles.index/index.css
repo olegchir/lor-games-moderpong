@@ -1,9 +1,21 @@
+body {
+    background: #272C2D;
+}
+
+a {
+    color: #729FCF;
+}
+
 #playground {
     background: #2E3436;
     width: 800px;
     height: 600px;
     position: relative;
     overflow: hidden;
+}
+
+#game {
+    width: 800px;
 }
 
 #moderhead {
@@ -29,4 +41,29 @@
 #paddleB {
     left: 690px;
     background: #FCAF3E;
+}
+
+#logo {
+    color: #FFFFFF;
+    text-align: center;
+    width: 100%;
+    background-color: #272C2D;
+}
+
+#content {
+    text-align: center;
+    margin: 0 auto;
+}
+
+#content {
+    text-align: center;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#footer {
+    color: #FFFFFF;
+    text-align: center;
+    margin-top:40px;
 }
